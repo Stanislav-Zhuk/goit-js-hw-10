@@ -78,7 +78,7 @@ function ifTooManyMatchesAlert() {
             borderRadius: '10px',
             timeout: 4000,
             clickToClose: true,
-            cssAnimationStyle: 'from-top',
+            cssAnimationStyle: 'zoom',
         });
 }
 
@@ -87,6 +87,6 @@ function ifWrongNameAlert() {
             borderRadius: '10px',
             timeout: 4000,
             clickToClose: true,
-            cssAnimationStyle: 'from-top',
+            cssAnimationStyle: 'zoom',
         });
 }
