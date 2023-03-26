@@ -15,7 +15,15 @@ countrySearchBox.addEventListener('input', debounce(handlerSearchOfCountry, DEBO
 
 // function to handler search of the entered country
 function handlerSearchOfCountry() {
+  // convert the value to lowercase and use trim. checking for an empty string
+  const name = countrySearchBox.value.toLowerCase().trim();
+  if (name === '') {
+    clearCountryListAndInfo();
+  }
+
   fetchCountries(name).then(country => {
+    clearCountryListAndInfo();
+
     // logic of country search
     if (country.length === 1) {
       countryInfo.insertAdjacentHTML('beforeend', markupCountryInfo(country));
@@ -24,5 +32,61 @@ function handlerSearchOfCountry() {
     } else {
       countryList.insertAdjacentHTML('beforeend', markupCountryList(country));
     }
-  }).catch()
+  }).catch(ifWrongNameAlert);
+}
+
+// function of marking the info of country
+function markupCountryInfo(country) {
+  return country.map(({ name, flags, capital, population, languages }) => `
+    <ul class="country-info__list">
+      <li class="country-info__item">
+        <img class="country-info__item--flag" src="${flags.svg}" alt="Flag of ${name.official}">
+        <h2 class="country-info__item--name">${name.official}</h2>
+      </li>
+      <li class="country-info__item">
+        <span class="country-info__item--categories">Capital: </span>${capital}
+      </li>
+      <li class="country-info__item">
+        <span class="country-info__item--categories">Population: </span>${population}
+      </li>
+      <li class="country-info__item">
+        <span class="country-info__item--categories">Languages: </span>${Object.values(languages).join(', ')}
+      </li>
+    </ul>
+  `).join('');
+}
+
+// function of marking the list of countries
+function markupCountryList(country) {
+  return country.map(({ name, flags}) => `
+    <li class="country-list__item">
+      <img class="country-list__item--flag" src="${flags.svg}" alt="Flag of ${name.official}">
+      <h2 class="country-list__item--name">${name.official}</h2>
+    </li>
+  `).join('');
+}
+
+// function of clearing the list of countries and information
+function clearCountryListAndInfo() {
+  countryList.innerHTML = '';
+  countryInfo.innerHTML = '';
+}
+
+// function for displaying warnings
+function ifTooManyMatchesAlert() {
+  Notiflix.Notify.info('Too many matches found. Please enter a more specific name.', {
+            borderRadius: '10px',
+            timeout: 4000,
+            clickToClose: true,
+            cssAnimationStyle: 'from-top',
+        });
+}
+
+function ifWrongNameAlert() {
+  Notiflix.Notify.failure('Oops, there is no country with that name', {
+            borderRadius: '10px',
+            timeout: 4000,
+            clickToClose: true,
+            cssAnimationStyle: 'from-top',
+        });
 }
