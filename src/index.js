@@ -27,7 +27,7 @@ function handlerSearchOfCountry() {
     // logic of country search
     if (country.length === 1) {
       countryInfo.insertAdjacentHTML('beforeend', markupCountryInfo(country));
-    } else if (country.length >= 10) {
+    } else if (country.length > 10) {
       ifTooManyMatchesAlert();
     } else {
       countryList.insertAdjacentHTML('beforeend', markupCountryList(country));
